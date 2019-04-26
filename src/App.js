@@ -1,55 +1,21 @@
 import React, { Component } from 'react';
 import './App.css';
 import CustomModal from './components/CustomModal';
+import DynamicComp from './components/DynamicComponents';
 import {
   Container,
   Row,
   Col,
-  Form,
-  FormGroup,
-  Label,
-  Input
 } from 'reactstrap';
 
-class InputField extends Component {
-  render() {
-    return (
-      <Row className='bg-light mt-2'>
-        <Col>
-          <Form>
-            <FormGroup>
-              <Label for="exampleEmail">Email</Label>
-              <Input type="email" name="email" id="exampleEmail" placeholder="Text field" />
-            </FormGroup>
-          </Form>
-        </Col>
-      </Row>
-    )
-  }
-}
+console.log(DynamicComp);
 
-class SelectField extends Component {
-  render() {
-    return (
-      <Row className='bg-light mt-2'>
-        <Col>
-          <Form>
-            <FormGroup>
-              <Label for="exampleSelect">Select</Label>
-              <Input type="select" name="select" id="exampleSelect">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-              </Input>
-            </FormGroup>
-          </Form>
-        </Col>
-      </Row>
-    )
+const componentsList = [
+  {
+    id: 1,
+    name: 'InputField'
   }
-}
+]
 
 const Header = ({
   toggle,
@@ -72,7 +38,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isModalOpen: false
+      isModalOpen: false,
     }
     this.handleModal = this.handleModal.bind(this);
   }
@@ -92,8 +58,10 @@ class App extends Component {
             <Col sm={3} xs={12} lg={3} />
             <Col>
               <Header handleModal={this.handleModal} />
-              <SelectField />
-              <InputField />
+              {componentsList.map(comp => {
+                let Comp = DynamicComp[comp.name];
+                return <Comp />
+              })}
             </Col>
             <Col sm={3} xs={12} lg={3} />
           </Row>
