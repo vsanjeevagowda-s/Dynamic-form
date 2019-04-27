@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import { connect } from 'react-redux';
 import CustomModal from './components/CustomModal';
 import DynamicComp from './components/DynamicComponents';
 import {
@@ -8,18 +9,17 @@ import {
   Col,
 } from 'reactstrap';
 
-console.log(DynamicComp);
-
-const componentsList = [
-  {
-    id: 1,
-    name: 'InputField'
-  }
-]
+const AppLayout = ({ children }) => {
+  return <Row>
+    <Col sm={3} xs={12} lg={3} />
+    <Col>
+      {children}
+    </Col>
+    <Col sm={3} xs={12} lg={3} />
+  </Row>
+};
 
 const Header = ({
-  toggle,
-  isOpen,
   handleModal
 }) => {
   return (
@@ -51,27 +51,33 @@ class App extends Component {
 
   render() {
     const { isModalOpen } = this.state;
+    const { fields } = this.props;
+    console.log('fields', fields)
     return (
       <div>
         <Container fluid>
-          <Row>
-            <Col sm={3} xs={12} lg={3} />
-            <Col>
-              <Header handleModal={this.handleModal} />
-              {componentsList.map(comp => {
-                let Comp = DynamicComp[comp.name];
-                return <Comp />
-              })}
-            </Col>
-            <Col sm={3} xs={12} lg={3} />
-          </Row>
+          <AppLayout>
+            <Header handleModal={this.handleModal} />
+            {fields.map(comp => {
+              let Comp = DynamicComp[comp.compName];
+              return <Comp key={comp.id} {...comp.props} />;
+            })}
+          </AppLayout>
           <CustomModal
+            title='Select Component'
             isModalOpen={isModalOpen}
             handleModal={this.handleModal} />
         </Container>
       </div>
     );
   }
+};
+
+const mapStateToProps = state => {
+  const { fields } = state.formFields;
+  return {fields};
 }
 
-export default App;
+const actions = {}
+
+export default connect(mapStateToProps, actions)(App);

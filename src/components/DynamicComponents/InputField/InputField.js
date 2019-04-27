@@ -9,19 +9,35 @@ import {
 } from 'reactstrap';
 
 
+
+const InputFiledLayout = ({ children }) => {
+  return (
+    <Row className='bg-light mt-2'>
+      <Col>
+        <Form>
+          <FormGroup>
+            {children}
+          </FormGroup>
+        </Form>
+      </Col>
+    </Row>
+  )
+}
+
 class InputField extends Component {
+
   render() {
+    const { label } = this.props;
     return (
-      <Row className='bg-light mt-2'>
-        <Col>
-          <Form>
-            <FormGroup>
-              <Label for="exampleEmail">Email</Label>
-              <Input type="email" name="email" id="exampleEmail" placeholder="Text field" />
-            </FormGroup>
-          </Form>
-        </Col>
-      </Row>
+      <InputFiledLayout>
+        <Label 
+        for={label}>{label}
+        </Label>
+        <Input 
+        type="text" 
+        name={label}
+        placeholder={`Enter ${label}`} />
+      </InputFiledLayout>
     )
   }
 };
