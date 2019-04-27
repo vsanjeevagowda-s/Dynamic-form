@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
+import componentsList from '../../../componentList';
 import {
   addFieldToForm
 } from '../../../actions/formFields.actions';
@@ -10,25 +11,6 @@ import {
   FormGroup,
   Button
 } from 'reactstrap';
-
-const componentsList = [
-  {
-    id: 1,
-    selectLabel: 'Input field',
-    compName: 'InputField',
-    props: {
-      label: ''
-    }
-  },
-  {
-    id: 2,
-    selectLabel: 'Date field',
-    compName: 'DateField',
-    props: {
-      label: ''
-    }
-  }
-];
 
 class FiledSelectForm extends Component {
 

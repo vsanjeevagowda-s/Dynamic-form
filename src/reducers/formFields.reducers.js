@@ -2,34 +2,18 @@ import {
   ADD_THE_FIELD_TO_FORM,
 } from '../actions/formFields.actions';
 
-const componentsList = [
-  {
-    id: 1,
-    selectLabel: 'Input field',
-    compName: 'InputField',
-    props: {
-      label: 'a'
-    }
-  },
-  {
-    id: 2,
-    selectLabel: 'Input field',
-    compName: 'InputField',
-    props: {
-      label: 'a'
-    }
-  }
-];
-
 const initialState = {
-  fields: componentsList,
+  fields: [],
 }
 
 const formFields = (state = initialState, action) => {
   switch (action.type) {
     case ADD_THE_FIELD_TO_FORM:
+    let newArr = [...state.fields];
+    newArr.push(action.field);
     return {
-      ...state
+      ...state,
+      fields: newArr,
     }
     default:
     return state

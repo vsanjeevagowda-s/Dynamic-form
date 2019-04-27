@@ -4,6 +4,9 @@ import { connect } from 'react-redux';
 import CustomModal from './components/CustomModal';
 import DynamicComp from './components/DynamicComponents';
 import {
+  handleModal
+} from './actions/helper.actions';
+import {
   Container,
   Row,
   Col,
@@ -37,22 +40,20 @@ const Header = ({
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isModalOpen: false,
-    }
     this.handleModal = this.handleModal.bind(this);
   }
 
   handleModal = (flag) => () => {
-    this.setState({
-      isModalOpen: flag,
-    })
+    const { handleModal } = this.props;
+    handleModal(flag, 'fieldTypeSelect');
   };
 
   render() {
-    const { isModalOpen } = this.state;
-    const { fields } = this.props;
-    console.log('fields', fields)
+    const {
+      fields,
+      flag,
+      whichModal
+    } = this.props;
     return (
       <div>
         <Container fluid>
@@ -63,10 +64,10 @@ class App extends Component {
               return <Comp key={comp.id} {...comp.props} />;
             })}
           </AppLayout>
-          <CustomModal
+          {(whichModal === 'fieldTypeSelect') && <CustomModal
             title='Select Component'
-            isModalOpen={isModalOpen}
-            handleModal={this.handleModal} />
+            isModalOpen={flag}
+            handleModal={this.handleModal} />}
         </Container>
       </div>
     );
@@ -75,9 +76,12 @@ class App extends Component {
 
 const mapStateToProps = state => {
   const { fields } = state.formFields;
-  return {fields};
+  const { flag, whichModal } = state.helper;
+  return { fields, flag, whichModal };
 }
 
-const actions = {}
+const actions = {
+  handleModal
+}
 
 export default connect(mapStateToProps, actions)(App);
