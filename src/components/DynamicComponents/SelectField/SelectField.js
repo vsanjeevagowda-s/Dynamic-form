@@ -10,18 +10,26 @@ import {
 
 class SelectField extends Component {
   render() {
+    console.log('SelectField', this.props);
+    const {
+      label,
+      removeFieldFromForm,
+      id,
+      options,
+    } = this.props;
     return (
       <Row className='bg-light mt-2'>
         <Col>
           <Form>
             <FormGroup>
-              <Label for="exampleSelect">Select</Label>
+              <Label for={label}>{label}</Label>
+              <span
+                className='float-right cursor-pointer'
+                onClick={removeFieldFromForm(id)}>x</span>
               <Input type="select" name="select" id="exampleSelect">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
+                {options.map(opt => {
+                  return <option value={opt.value}>{opt.label}</option>
+                })}
               </Input>
             </FormGroup>
           </Form>

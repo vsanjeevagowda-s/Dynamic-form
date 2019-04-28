@@ -13,7 +13,7 @@ import {
 
 
 
-const InputFiledLayout = ({ children }) => {
+const DateFieldLayout = ({ children }) => {
   return (
     <Row className='bg-light mt-2'>
       <Col>
@@ -27,7 +27,7 @@ const InputFiledLayout = ({ children }) => {
   )
 }
 
-class InputField extends Component {
+class DateField extends Component {
 
   render() {
     const { 
@@ -36,18 +36,18 @@ class InputField extends Component {
       id 
     } = this.props;
     return (
-      <InputFiledLayout>
-        <Label 
-        for={label}>{label}
+      <DateFieldLayout>
+        <Label
+          for={label}>
+          {label}
         </Label>
         <span 
         className='float-right cursor-pointer'
         onClick={removeFieldFromForm(id)}>x</span>
-        <Input 
-        type="text" 
-        name={label}
-        placeholder={`Enter ${label}`} />
-      </InputFiledLayout>
+        <Input
+          type="date"
+          name={label} />
+      </DateFieldLayout>
     )
   }
 };
@@ -58,4 +58,4 @@ const mapStateToProps = state => {
 
 const actions = {}
 
-export default connect(mapStateToProps, actions)(InputField);
+export default connect(mapStateToProps, actions)(DateField);

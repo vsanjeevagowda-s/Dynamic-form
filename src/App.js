@@ -7,6 +7,9 @@ import {
   handleModal
 } from './actions/helper.actions';
 import {
+  removeFieldFromForm
+} from './actions/formFields.actions';
+import {
   Container,
   Row,
   Col,
@@ -52,7 +55,8 @@ class App extends Component {
     const {
       fields,
       flag,
-      whichModal
+      whichModal,
+      removeFieldFromForm
     } = this.props;
     return (
       <div>
@@ -61,7 +65,7 @@ class App extends Component {
             <Header handleModal={this.handleModal} />
             {fields.map(comp => {
               let Comp = DynamicComp[comp.compName];
-              return <Comp key={comp.id} {...comp.props} />;
+              return <Comp key={comp.id} {...comp.props} id={comp.id} removeFieldFromForm={removeFieldFromForm} />;
             })}
           </AppLayout>
           {(whichModal === 'fieldTypeSelect') && <CustomModal
@@ -81,7 +85,8 @@ const mapStateToProps = state => {
 }
 
 const actions = {
-  handleModal
+  handleModal,
+  removeFieldFromForm
 }
 
 export default connect(mapStateToProps, actions)(App);

@@ -5,6 +5,11 @@ import {
   addFieldToForm
 } from '../../../actions/formFields.actions';
 import {
+  handleModal
+} from '../../../actions/helper.actions';
+import {
+  Row,
+  Col,
   Form,
   Label,
   Input,
@@ -19,60 +24,141 @@ class FiledSelectForm extends Component {
     this.state = {
       selectedFieldObj: componentsList[0],
     }
-    this.handleOnChange = this.handleOnChange.bind(this);
+    this.handleOnLabelChange = this.handleOnLabelChange.bind(this);
+    this.handleOnLabelChange = this.handleOnLabelChange.bind(this);
     this.addFieldToForm = this.addFieldToForm.bind(this);
+    this.getTheSelectedObject = this.getTheSelectedObject.bind(this);
+    this.renderOptions = this.renderOptions.bind(this);
+    this.renderOptionsValues = this.renderOptionsValues.bind(this);
+    this.addOptionField = this.addOptionField.bind(this);
   }
 
-  handleOnChange = () => (e) => {
-    let selectedFieldObj = {};
-    switch (e.target.name) {
-      case 'componentType':
-        selectedFieldObj = componentsList.filter(item => {
-          return item.compName === e.target.value;
-        })[0];
-        break;
-      case 'componentLabel':
-      selectedFieldObj = {...this.state.selectedFieldObj};
-      selectedFieldObj.props.label = e.target.value;
-        break;
-      default:
-        selectedFieldObj = {};
+  addOptionField = () => (e) => {
+    const { selectedFieldObj } = this.state;
+    const obj = { ...selectedFieldObj };
+    if (obj.props.options){
+      obj.props.options.push({
+        id: Math.random(),
+        value: '',
+        label: '',
+      })
     }
+    return this.setState({
+      selectedFieldObj: obj,
+    })
+  }
+
+  removeOptionField = (id) => (e) => {
+    debugger
+    const { selectedFieldObj } = this.state;
+    const obj = { ...selectedFieldObj };
+    const newOpts = obj.props.options.filter(i => {
+      return i.id !== id;
+    });
+    debugger
+    obj.props.options = newOpts;
+    return this.setState({
+      selectedFieldObj: obj
+    })
+  }
+
+  renderOptionsValues = ({ value, id, label }) => {
+    return (
+      <React.Fragment key={id}>
+        <Col sm={10}>
+          <FormGroup>
+            <Input
+              type="text"
+              value={value}
+              name={label}
+              onChange={() => console.log('tets')}>
+            </Input>
+          </FormGroup>
+        </Col>
+        <Col sm={2}>
+          <i 
+          className="fa fa-minus-circle fa-2x"
+          onClick={this.removeOptionField(id)}></i>
+        </Col>
+      </React.Fragment>
+    )
+  }
+
+  renderOptions = () => {
+    const { selectedFieldObj } = this.state;
+    const { options } = selectedFieldObj.props;
+    return (
+      <Row>
+        <Col sm={12} xs={12} lg={12}>
+          <Label >Options</Label>
+        </Col>
+        { options.map(item => {
+          return this.renderOptionsValues(item);
+        }) }
+        <Col sm={12}>
+          <p 
+          className='text-center text-primary underline cursor-pointer'
+          onClick={this.addOptionField()}>Add option</p>
+        </Col>
+      </Row>
+    )
+  }
+
+  getTheSelectedObject = (e) => {
+    const obj = componentsList.filter(item => {
+      return item.compName === e.target.value;
+    })[0];
+    return { ...obj };
+  };
+
+  handleOnSelectChange = () => (e) => {
+    const selectedFieldObj = this.getTheSelectedObject(e);
+    return this.setState({
+      selectedFieldObj
+    });
+  };
+
+  handleOnLabelChange = () => (e) => {
+    const selectedFieldObj = { ...this.state.selectedFieldObj };
+    selectedFieldObj.props.label = e.target.value;
     this.setState({
       selectedFieldObj
     });
-    console.log('state', this.state);
-  }
+  };
 
   addFieldToForm = () => () => {
-    const { addFieldToForm } = this.props;
+    const { addFieldToForm, handleModal } = this.props;
     const { selectedFieldObj } = this.state;
-    addFieldToForm({ ...selectedFieldObj });
-  }
+    addFieldToForm({ ...selectedFieldObj, id: Date.now() });
+    handleModal(false, 'fieldTypeSelect');
+  };
 
   render() {
     const { selectedFieldObj } = this.state;
     return (
       <Form>
+
         <FormGroup>
           <Label >Component Type</Label>
           <Input
             type="select"
             name='componentType'
             value={selectedFieldObj.compName}
-            onChange={this.handleOnChange()} >
+            onChange={this.handleOnSelectChange()} >
             {componentsList.map(item =>
               <option value={item.compName} key={item.id}>{item.selectLabel}</option>)}
           </Input>
         </FormGroup>
+
         <FormGroup>
           <Label>Component Label</Label>
-          <Input 
-          type="text" 
-          value={selectedFieldObj.props.label}
-          name='componentLabel' 
-          onChange={this.handleOnChange()} />
+          <Input
+            type="text"
+            value={selectedFieldObj.props.label}
+            name='componentLabel'
+            onChange={this.handleOnLabelChange()} />
         </FormGroup>
+              { selectedFieldObj.props.options && this.renderOptions() }
         <Button color="primary" size="lg" block onClick={this.addFieldToForm()}>Add</Button>
       </Form>
     );
@@ -84,7 +170,8 @@ const mapStateToProps = state => {
 };
 
 const actions = {
-  addFieldToForm
-}
+  addFieldToForm,
+  handleModal
+};
 
 export default connect(mapStateToProps, actions)(FiledSelectForm);

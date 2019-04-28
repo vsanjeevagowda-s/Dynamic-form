@@ -12,6 +12,26 @@ export default [
     selectLabel: 'Select field',
     compName: 'SelectField',
     props: {
+      label: '',
+      options:[
+        {
+          id: Math.random(),
+          value: 'value1',
+          label: 'label1'
+        },
+        {
+          id: Math.random(),
+          value: 'value2',
+          label: 'label2'
+        }
+      ]
+    }
+  },
+  {
+    id: 3,
+    selectLabel: 'Date field',
+    compName: 'DateField',
+    props: {
       label: ''
     }
   }
