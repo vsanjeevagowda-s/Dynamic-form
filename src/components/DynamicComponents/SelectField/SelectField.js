@@ -10,7 +10,6 @@ import {
 
 class SelectField extends Component {
   render() {
-    console.log('SelectField', this.props);
     const {
       label,
       removeFieldFromForm,
@@ -28,7 +27,7 @@ class SelectField extends Component {
                 onClick={removeFieldFromForm(id)}>x</span>
               <Input type="select" name="select" id="exampleSelect">
                 {options.map(opt => {
-                  return <option value={opt.value}>{opt.label}</option>
+                  return <option key={opt.id} value={opt.value}>{opt.label}</option>
                 })}
               </Input>
             </FormGroup>

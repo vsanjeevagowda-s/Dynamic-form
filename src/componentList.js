@@ -34,5 +34,13 @@ export default [
     props: {
       label: ''
     }
+  },
+  {
+    id: 4,
+    selectLabel: 'Text Area field',
+    compName: 'TextAreaField',
+    props: {
+      label: ''
+    }
   }
 ];
