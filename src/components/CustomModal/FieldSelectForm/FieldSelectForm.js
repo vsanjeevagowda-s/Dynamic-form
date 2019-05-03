@@ -31,7 +31,25 @@ class FiledSelectForm extends Component {
     this.renderOptions = this.renderOptions.bind(this);
     this.renderOptionsValues = this.renderOptionsValues.bind(this);
     this.addOptionField = this.addOptionField.bind(this);
+    this.handleOptionChange = this.handleOptionChange.bind(this);
   }
+
+  handleOptionChange = (i) => (e) => {
+    console.log('this.state =>', this.state);
+    const { selectedFieldObj } = this.state
+    const newSelobj = JSON.parse(JSON.stringify(selectedFieldObj));
+    newSelobj.props.options.map(item => {
+      if (item.id === i) {
+        item['value'] = item['label'] = e.target.value;
+      }
+      return item;
+    });
+    console.log('this.state / newOptions =>', this.state);
+    this.setState({
+      selectedFieldObj: newSelobj
+    })
+    console.log('after the state set', this.state);
+  };
 
   addOptionField = () => (e) => {
     const { selectedFieldObj } = this.state;
@@ -49,13 +67,11 @@ class FiledSelectForm extends Component {
   }
 
   removeOptionField = (id) => (e) => {
-    debugger
     const { selectedFieldObj } = this.state;
     const obj = { ...selectedFieldObj };
     const newOpts = obj.props.options.filter(i => {
       return i.id !== id;
     });
-    debugger
     obj.props.options = newOpts;
     return this.setState({
       selectedFieldObj: obj
@@ -71,7 +87,7 @@ class FiledSelectForm extends Component {
               type="text"
               value={value}
               name={label}
-              onChange={() => console.log('tets')}>
+              onChange={this.handleOptionChange(id)}>
             </Input>
           </FormGroup>
         </Col>
